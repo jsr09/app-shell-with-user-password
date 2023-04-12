@@ -1,7 +1,12 @@
 {
+  "name": "app",
+  "version": "1.0",
+  "description": "A simple react app",
+  "main": "index.js",
   "scripts": {
-    "start": "node server",
-    "start-dev": "webpack -w & nodemon server"
+    "start": "NODE_ENV=production node server",
+    "start-dev": "NODE_ENV=development webpack -w & nodemon server",
+    "seed": "NODE_ENV=seed node server"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
