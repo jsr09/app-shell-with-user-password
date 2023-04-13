@@ -17,9 +17,6 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-//token authentication middleware
-
-
 //Auth and API Routes
 app.use('/auth', require('./auth'));
 app.use("/api", require("./api"));
