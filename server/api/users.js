@@ -1,4 +1,3 @@
-console.log("Executing users.js file");
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
@@ -24,8 +23,6 @@ const authMiddleware = async function (req, res, next) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 }
-console.log(authMiddleware);
-// console.log(req.user);
 
 // Get /api/user/profile
 router.get("/profile", authMiddleware, async (req, res, next) => {

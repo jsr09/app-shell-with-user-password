@@ -1,35 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // hardcoded username and password for demo purposes
-    const validUsername = "myusername";
-    const validPassword = "mypassword";
+  const handleLogin = async () => {
+    try {
+      const { data } = await axios.post("/login", {
+        email,
+        password,
+      });
 
-    // verify the entered username and password
-    if (username === validUsername && password === validPassword) {
-      // if login is successful, navigate to profile page
-      navigate("/profile");
-    } else {
-      // if login is unsuccessful, show an error message
-      console.log("Invalid username or password");
+      if (!data.token) {
+        setError("Invalid email or password");
+        return;
+      }
+
+      navigate("/user/profile");
+    } catch (error) {
+      console.log(error.response.data);
+      setError("Invalid email or password");
     }
   };
 
+  const handleCreateAccount = () => {
+    navigate("/registration");
+  };
 
   return (
     <div>
       <label>
-        Username:
+        User Email:
         <input
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={email}
+          onChange={(e) => setUserEmail(e.target.value)}
         />
       </label>
       <label>
@@ -41,6 +50,9 @@ const Login = () => {
         />
       </label>
       <button onClick={handleLogin}>Login</button>
+      <button onClick={handleCreateAccount}>Create Account</button>
+      <br />
+      {error && <h2>{error}</h2>}
     </div>
   );
 };
