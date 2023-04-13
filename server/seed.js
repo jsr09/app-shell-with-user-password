@@ -1,4 +1,4 @@
-const { User } = require("./database/models/User");
+const User = require("./database/models/User");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 
