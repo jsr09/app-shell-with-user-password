@@ -1,4 +1,4 @@
-const { db } = require("./database/db");
+const db = require("./database/db");
 const Port = process.env.PORT || 8080;
 const app = require("./app");
 const seed = require("./seed");

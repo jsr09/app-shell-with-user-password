@@ -3,8 +3,9 @@ const morgan = require("morgan");
 const path = require("path");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+console.log(process.env.JWT);
 const app = express();
-const { User } = require("./models");
+const { User } = require("./database/models/User");
 
 //Logging Middleware
 app.use(morgan("dev"));
@@ -17,25 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //token authentication middleware
-app.use(async function (req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await User.findByPk(decoded.id);
-      if (!user) {
-        return res.status(401).json({ message: "Unauthorized" });
-      }
-      req.user = user;
-      next();
-    } catch (error) {
-      return res.status(403).json({ message: "Invalid token" });
-    }
-  } else {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-});
+
 
 //Auth and API Routes
 app.use('/auth', require('./auth'));
@@ -57,4 +40,4 @@ app.use(function (err, req, res, next) {
   res.satus(err.status || 500).send(err.message || "Internal Server Error");
 });
 
-module.exports = app;
+module.exports = app

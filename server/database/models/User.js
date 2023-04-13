@@ -1,19 +1,19 @@
-const Sequalize = require('sequalize');
-const db = require('./db');
+const Sequelize = require('sequelize');
+const db = require('../db');
 const bcrypt = require('bcrypt');
 
 const User = db.define('user', {
     name: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false
     },
     email: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false,
       unique: true
     },
     password: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false
     }
 });
