@@ -10,7 +10,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const { data } = await axios.post("/login", {
+      const { data } = await axios.post("/api/login", {
         email,
         password,
       });
@@ -19,7 +19,7 @@ const Login = () => {
         setError("Invalid email or password");
         return;
       }
-
+      localStorage.setItem("token", data.token);
       navigate("/user/profile");
     } catch (error) {
       console.log(error.response.data);

@@ -13,23 +13,17 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-//Auth and API Routes
+//API Routes
 app.use("/api", require("./api"));
 
-app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
+// app.get("/", function (req, res) {
+//   res.sendFile(path.join(__dirname, "../public/index.html"));
+// });
 
 //sends index.html
 app.use("*", function (req, res) {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });
-
-//redirects to login page if not logged in
-// app.use("*", function (req, res) {
-//   res.redirect("/login");
-// });
-
 
 //error handling endware
 app.use(function (err, req, res, next) {

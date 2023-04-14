@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
 const { User } = require("../database/models/User");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv")
+dotenv.config();
 
 const authMiddleware = async function (req, res, next) {
   const authHeader = req.headers.authorization;
@@ -15,7 +16,8 @@ const authMiddleware = async function (req, res, next) {
         return res.status(401).json({ message: "Unauthorized" });
       }
       req.user = user;
-      next();
+      next(error);
+
     } catch (error) {
       return res.status(403).json({ message: "Invalid token" });
     }
@@ -41,4 +43,4 @@ router.get("/profile", authMiddleware, async (req, res, next) => {
 
 //delete/api/user/profile
 
-module.exports = router;
+module.exports = router
