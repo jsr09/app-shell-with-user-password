@@ -15,7 +15,7 @@ const init = async () => {
    
   } catch (error) {
     console.error('Seeding Failed');
-    db.close();
+    // db.close();
   }
 };
 

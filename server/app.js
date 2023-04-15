@@ -20,7 +20,7 @@ app.use("/api", require("./api"));
 //   res.sendFile(path.join(__dirname, "../public/index.html"));
 // });
 
-//sends index.html
+// sends index.html
 app.use("*", function (req, res) {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });

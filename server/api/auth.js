@@ -1,34 +1,49 @@
 const express = require("express");
 const router = express.Router();
+const User = require("../database/models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
-const User = require("../database/models/User");
+
 
 //Post/api/login route is the landing page for the app
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
   try {
-    console.log('login route being accessed');
-    const user = await User.findOne({ where: { email: req.body.email } });
+    console.log("login route being accessed");
+    // const { email, password } = req.body;
+    const email = "john.doe@example.com";
+    const password = "password1";
+
+    
+    const user = await User.findAll({ where: { email } });
     console.log("User found:", user);
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    } 
-
-    const validPassword = await user.validPassword(req.body.password);
+    const validPassword = await user.validPassword(password);
     console.log("validPassword: ", validPassword);
 
-    if (!validPassword) {
-      return res.status(401).json({ message: "Invalid password" });
+    if(!user ||!validPassword) {
+      res.status(401).json({ message: "Invalid email or password" });
     }
-    const token = jwt.sign({ id: user.id }, process.env.JWT, {
+
+    // if (!user) {
+    //   return res.status(401).json({ message: "User not found" });
+    // } 
+
+    // const validPassword = await user.validPassword(password);
+    // console.log("validPassword: ", validPassword);
+
+    // if (!validPassword) {
+    //   return res.status(401).json({ message: "Invalid password" });
+    // }
+    const token = jwt.sign({userId: user.id}, process.env.JWT, {
       expiresIn: rememberMe ? "30d" : "1d", // Set the expiration time based on whether "Remember Me" is checked
     });
+    res.json({ token });
     console.log("token: ", token);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).send({ message: "Server Error" });
+    next(err);
   }
 });
 
@@ -58,7 +73,5 @@ router.post("/registration", async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 });
-
-
 
 module.exports = router;

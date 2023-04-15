@@ -23,7 +23,8 @@ const User = db.define('User', {
 
 User.beforeCreate( async (user) => {
     const salt = await bcrypt.genSalt(Number(process.env.ROUNDS));
-    user.password =  await bcrypt.hash(user.password, salt);
+    hashedPassword =  await bcrypt.hash(user.password, salt);
+    user.password = hashedPassword;
 });
 
 User.prototype.validPassword = async function (password) {

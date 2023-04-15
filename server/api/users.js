@@ -1,38 +1,38 @@
 const express = require("express");
 const router = express.Router();
-const { User } = require("../database/models/User");
+const User = require("../database/models/User");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv")
 dotenv.config();
 
 const authMiddleware = async function (req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
+  const token = req.headers.authorization;
+  if (token) {
+    console.log(token);
     try {
-      const decoded = jwt.verify(token, process.env.JWT);
-      const user = await User.findByPk(decoded.id);
+      const id = jwt.verify(token, process.env.JWT);
+      const user = await User.findByPk(id);
       if (!user) {
         return res.status(401).json({ message: "Unauthorized" });
       }
       req.user = user;
-      next(error);
-
     } catch (error) {
       return res.status(403).json({ message: "Invalid token" });
+      next(error);
     }
   } else {
-    return res.status(401).json({ message: "Unauthorized" });
+    next();
   }
 }
 
 // Get /api/user/profile
 router.get("/profile", authMiddleware, async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.user.id);
-    res.status(200).json(user);
+    console.log(req.user);
+    if(req.user)
+    res.json(req.user);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(400).json({message: 'Please log in'});
     next(error);
   }
 });
